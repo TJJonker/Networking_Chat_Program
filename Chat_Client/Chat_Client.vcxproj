@@ -39,7 +39,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;..\TwoNet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\Vendor\TwoNet\include;..\Vendor\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -53,16 +53,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Debug\Assertion.h" />
+    <ClInclude Include="src\Debug\Log.h" />
+    <ClInclude Include="src\Server\NetworkServer.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Server\NetworkServer.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TwoNet\TwoNet.vcxproj">
+    <ProjectReference Include="..\Vendor\TwoNet\TwoNet.vcxproj">
       <Project>{E6F477D4-D296-A2AA-BB51-B6FEA79229FB}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -16,7 +16,8 @@ project "Chat_Client"
 
 	includedirs {
 		"src",
-		solutionDir .. "%{includeDirs.TwoNet}"
+		solutionDir .. "%{includeDirs.TwoNet}",
+		solutionDir .. "%{includeDirs.SPDLOG}"
 	}
 
 	libdirs {

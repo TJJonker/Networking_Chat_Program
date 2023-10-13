@@ -9,13 +9,14 @@ workspace "Chat_Program"
 solutionDir = "%{wks.location}/"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "TwoNet"
+include "Vendor/TwoNet"
 include "Chat_Client"
 
 includeDirs = {}
-includeDirs["TwoNet"] = "TwoNet/include"
+includeDirs["TwoNet"] = "Vendor/TwoNet/include"
+includeDirs["SPDLOG"] = "Vendor/spdlog/include"
 
 libraryDirs = {}
-libraryDirs["TwoNet"] = "TwoNet/lib"
+libraryDirs["TwoNet"] = "Vendor/TwoNet/lib"
 
 
