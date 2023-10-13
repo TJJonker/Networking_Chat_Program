@@ -9,8 +9,8 @@ workspace "Chat_Program"
 solutionDir = "%{wks.location}/"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "Chat_Client"
 include "TwoNet"
+include "Chat_Client"
 
 includeDirs = {}
 includeDirs["TwoNet"] = "TwoNet/include"

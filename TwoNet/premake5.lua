@@ -5,8 +5,8 @@ project "TwoNet"
 	targetdir ("lib")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "pch.h"
-	pchsource "include/TwoNet/pch.cpp" 
+	pchheader "tpch.h"
+	pchsource "include/TwoNet/tpch.cpp" 
 
 	files
 	{
@@ -15,7 +15,7 @@ project "TwoNet"
 	}
 
 	includedirs {
-		"src"
+		"include"
 	}
 
 	defines { }

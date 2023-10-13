@@ -1,5 +1,5 @@
 #pragma once
-#include "pch.h"
+#include "TwoNet/tpch.h"
 
 namespace TwoNet {
 
@@ -7,7 +7,8 @@ namespace TwoNet {
 	{
 	private:
 		std::vector<char> m_Buffer;
-		unsigned int m_Index;
+		size_t m_WriteIndex;
+		size_t m_ReadIndex;
 
 	public:
 		Buffer(size_t intialSize = 1024);
@@ -19,10 +20,13 @@ namespace TwoNet {
 		void SerializeUInt_16(uint16_t value);
 		uint32_t DeserializeUInt_16();
 
+		void SerializeString(const std::string& message);
+		std::string DeserializeString(size_t stringLength);
+
 		const char* GetData();
 		void EnsureCapacity(size_t value);
 
-		unsigned int GetSize();
+		size_t GetSize();
 		void Clear();
 	};
 }
