@@ -1,4 +1,4 @@
-project "Chat_Client"
+project "Chat_Server"
 	kind "ConsoleApp"
 	language "C++"
 

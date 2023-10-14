@@ -38,7 +38,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>tpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include\TwoNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -56,10 +56,10 @@
     <ClInclude Include="include\TwoNet\tpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\TwoNet\Buffer\Buffer.cpp" />
-    <ClCompile Include="include\TwoNet\Main.cpp" />
-    <ClCompile Include="include\TwoNet\Protocols\TwoProt.cpp" />
-    <ClCompile Include="include\TwoNet\tpch.cpp">
+    <ClCompile Include="src\Buffer.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\TwoProt.cpp" />
+    <ClCompile Include="src\tpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>

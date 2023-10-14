@@ -7,10 +7,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E348F7DC-4FFE-6FD2-D8F2-69A944A766D6}</ProjectGuid>
+    <ProjectGuid>{FB5DD001-6713-49F7-F007-43CE5CBC3FFB}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Chat_Client</RootNamespace>
+    <RootNamespace>Chat_Server</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -29,9 +29,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug-windows-x86_64\Chat_Client\</OutDir>
-    <IntDir>..\bin-int\Debug-windows-x86_64\Chat_Client\</IntDir>
-    <TargetName>Chat_Client</TargetName>
+    <OutDir>..\bin\Debug-windows-x86_64\Chat_Server\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x86_64\Chat_Server\</IntDir>
+    <TargetName>Chat_Server</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -54,10 +54,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Debug\Assertion.h" />
+    <ClInclude Include="src\Debug\Log.h" />
+    <ClInclude Include="src\Server\NetworkServer.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Server\NetworkServer.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

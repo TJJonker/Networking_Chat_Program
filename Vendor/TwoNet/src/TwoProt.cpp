@@ -1,5 +1,5 @@
 #include "tpch.h"
-#include "TwoProt.h"
+#include "Protocols/TwoProt.h"
 
 namespace TwoNet {
 	TwoProt::TwoProt(Buffer& buffer)

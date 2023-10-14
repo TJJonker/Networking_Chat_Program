@@ -1,5 +1,5 @@
 #include "tpch.h"
-#include "Buffer.h"
+#include "Buffer/Buffer.h"
 
 namespace TwoNet {
 
@@ -76,6 +76,13 @@ namespace TwoNet {
 	const char* Buffer::GetData()
 	{
 		return m_Buffer.data();
+	}
+
+	void Buffer::WriteBuffer(const char* data, size_t dataSize)
+	{
+		EnsureCapacity(dataSize);
+		memcpy(&m_Buffer[m_WriteIndex], data, dataSize);
+		m_WriteIndex += dataSize;
 	}
 
 	void Buffer::EnsureCapacity(size_t size)

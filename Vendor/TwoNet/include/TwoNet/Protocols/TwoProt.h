@@ -1,6 +1,4 @@
 #pragma once
-#include <TwoNet/Buffer/Buffer.h>
-#include "TwoNet/tpch.h"
 
 namespace TwoNet {
 	class TwoProt {

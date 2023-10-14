@@ -1,5 +1,4 @@
 #pragma once
-#include "TwoNet/tpch.h"
 
 namespace TwoNet {
 
@@ -24,6 +23,7 @@ namespace TwoNet {
 		std::string DeserializeString(size_t stringLength);
 
 		const char* GetData();
+		void WriteBuffer(const char* data, size_t dataSize);
 		void EnsureCapacity(size_t value);
 
 		size_t GetSize();

@@ -1,30 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Buffer">
-      <UniqueIdentifier>{3F5F52AA-2B01-7D80-14BC-90D400FD03D1}</UniqueIdentifier>
+    <Filter Include="include">
+      <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Protocols">
-      <UniqueIdentifier>{CA377805-36A2-2C7C-7FE0-DD21EB890AD1}</UniqueIdentifier>
+    <Filter Include="include\TwoNet">
+      <UniqueIdentifier>{F9D2C023-E5A0-B429-CE34-2550BAA1908E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\TwoNet\Buffer">
+      <UniqueIdentifier>{C222CDFC-2E8F-88F7-F782-205563AEAA5F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\TwoNet\Protocols">
+      <UniqueIdentifier>{6DF0E768-5915-37E9-8260-1C796EE43507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\TwoNet\Buffer\Buffer.h">
-      <Filter>Buffer</Filter>
+      <Filter>include\TwoNet\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="include\TwoNet\Protocols\TwoProt.h">
-      <Filter>Protocols</Filter>
+      <Filter>include\TwoNet\Protocols</Filter>
     </ClInclude>
-    <ClInclude Include="include\TwoNet\tpch.h" />
+    <ClInclude Include="include\TwoNet\tpch.h">
+      <Filter>include\TwoNet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\TwoNet\Buffer\Buffer.cpp">
-      <Filter>Buffer</Filter>
+    <ClCompile Include="src\Buffer.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="include\TwoNet\Main.cpp" />
-    <ClCompile Include="include\TwoNet\Protocols\TwoProt.cpp">
-      <Filter>Protocols</Filter>
+    <ClCompile Include="src\Main.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="include\TwoNet\tpch.cpp" />
+    <ClCompile Include="src\TwoProt.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tpch.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

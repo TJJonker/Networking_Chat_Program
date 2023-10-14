@@ -6,16 +6,16 @@ project "TwoNet"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
 	pchheader "tpch.h"
-	pchsource "include/TwoNet/tpch.cpp" 
+	pchsource "src/tpch.cpp" 
 
 	files
 	{
-		"include/TwoNet/**.cpp",
+		"src/**.cpp",
 		"include/TwoNet/**.h"
 	}
 
 	includedirs {
-		"include"
+		"include/TwoNet"
 	}
 
 	defines { }
