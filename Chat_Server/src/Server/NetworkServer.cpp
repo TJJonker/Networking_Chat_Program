@@ -76,10 +76,18 @@ void NetworkServer::ListenForConnections()
 			FD_SET(newfd, &m_readfds);
 			
 			TwoNet::Buffer buffer;
-			ReceiveData(buffer, newfd);
-			int length = buffer.DeserializeUInt_16();
-			std::string clientID = buffer.DeserializeString(length);
-			m_Clients.insert({ clientID, {newfd, clientID} });
+			//ReceiveData(buffer, newfd);
+			//int length = buffer.DeserializeUInt_16();
+			//std::string clientID = buffer.DeserializeString(length);
+			m_Clients.insert({ "ID", {newfd, "ID"}});
+
+			buffer.Clear();
+			std::string welcomeMessage = "Welcome to the Void!";
+			buffer.SerializeUInt_16(welcomeMessage.length());
+			buffer.SerializeString(welcomeMessage);
+			SendData(newfd, buffer);
+
+			TWONET_LOG_TRACE("Connection made.");
 		}
 	}
 

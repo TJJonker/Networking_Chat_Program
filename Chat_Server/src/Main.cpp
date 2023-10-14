@@ -7,11 +7,13 @@
 #include <TwoNet/Protocols/TwoProt.h>
 
 int main() {
-	//TwoNet::Log::Init();
+	TwoNet::Log::Init();
 
-	//NetworkServer server("127.0.0.1", "8412");
-	//bool result = server.Initialize();
+	NetworkServer server("127.0.0.1", "8412");
+	bool result = server.Initialize();
 
-	//while(true)
-	//	server.ListenForConnections();
+	while (true) {
+		server.ListenForConnections();
+
+	}
 }

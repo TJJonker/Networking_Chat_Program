@@ -54,9 +54,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Debug\Assertion.h" />
+    <ClInclude Include="src\Debug\Log.h" />
+    <ClInclude Include="src\Networking\Client.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Debug\Log.cpp" />
+    <ClCompile Include="src\Networking\Client.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
