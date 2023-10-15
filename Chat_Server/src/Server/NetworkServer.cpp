@@ -5,7 +5,7 @@
 #define TERMINATE(message) { TWONET_LOG_ERROR(message); NetworkServer::Terminate(); return false; }
 
 NetworkServer::NetworkServer(const char* ip, const char* port)
-	: m_IP(ip), m_Port(port), m_ListenSocket(INVALID_SOCKET), m_ServerInfo(nullptr), m_WsaData(), m_readfds() { }
+	: m_IP(ip), m_Port(port), m_ListenSocket(INVALID_SOCKET), m_ServerInfo(nullptr), m_WsaData(), m_Readfds() { }
 
 NetworkServer::~NetworkServer()
 {
@@ -41,7 +41,7 @@ bool NetworkServer::Initialize()
 
 	// Binding
 	result = bind(m_ListenSocket, m_ServerInfo->ai_addr, m_ServerInfo->ai_addrlen);
-	if (result == SOCKET_ERROR) 
+	if (result == SOCKET_ERROR)
 		TERMINATE("Socket Creation failed.");
 
 	// Listening
@@ -49,17 +49,19 @@ bool NetworkServer::Initialize()
 	if (result == SOCKET_ERROR)
 		TERMINATE("Socket listening failed.");
 
-	FD_ZERO(&m_readfds);
-	FD_SET(m_ListenSocket, &m_readfds);
+	FD_ZERO(&m_Readfds);
+	FD_SET(m_ListenSocket, &m_Readfds);
 
 	return true;
 }
 
 void NetworkServer::ListenForConnections()
 {
-	fd_set temp = m_readfds;
-	int selectResult = select(m_ListenSocket + 1, &temp, NULL, NULL, NULL);
-	if (selectResult == SOCKET_ERROR) {
+	fd_set temp = m_Readfds;
+	int result;
+
+	result = select(m_ListenSocket + 1, &temp, NULL, NULL, NULL);
+	if (result == SOCKET_ERROR) {
 		TWONET_LOG_ERROR("Select error... (ERROR: {0})", WSAGetLastError());
 		return;
 	}
@@ -71,40 +73,38 @@ void NetworkServer::ListenForConnections()
 
 		if (newfd == INVALID_SOCKET) {
 			TWONET_LOG_ERROR("Socket acceptance failed... (Error: {0})", WSAGetLastError());
+			return;
 		}
-		else {
-			FD_SET(newfd, &m_readfds);
+		
+		FD_SET(newfd, &m_Readfds);
 			
-			TwoNet::Buffer buffer;
-			if (ReceiveData(buffer, newfd)) {
+		TwoNet::Buffer buffer;
+		if (ReceiveData(buffer, newfd)) {
 				
-				int length = buffer.DeserializeUInt_16();
-				const void* data = buffer.DeserializeData(length);
-				std::string clientID(static_cast<const char*>(data));
-				TWONET_LOG_TRACE("New ID: {0}", clientID);
-			}
-
-			m_Clients.insert({ "ID", {newfd, "ID"}});
-
-			buffer.Clear();
-			std::string welcomeMessage = "Welcome to the Void!";
-			TwoNet::TwoProt::SerializeData(buffer, welcomeMessage.c_str(), welcomeMessage.length());
-			SendData(newfd, buffer);
-
-			TWONET_LOG_TRACE("Connection made.");
+			const void* data = TwoNet::TwoProt::DeserializeData(buffer);
+			std::string clientID(static_cast<const char*>(data));
+			m_Clients.insert({ clientID, {newfd, clientID}});
+			TWONET_LOG_TRACE("New ID: {0}", clientID);
 		}
-	}
 
-	for (SOCKET fd = 0; fd < FD_SETSIZE; fd++) {
-		if (FD_ISSET(fd, &temp) && fd != m_ListenSocket) {
-			// Handle data
+		buffer.Clear();
+		std::string welcomeMessage = "Welcome to the Void!";
+		TwoNet::TwoProt::SerializeData(buffer, welcomeMessage.c_str(), welcomeMessage.length());
+		result = SendData(newfd, buffer);
+		if (!result) {
+			TWONET_LOG_WARNING("Failed to send handshake.");
+			return;
 		}
+
+		TWONET_LOG_TRACE("Connection made.");		
 	}
 }
 
 bool NetworkServer::SendData(SOCKET socket, TwoNet::Buffer& buffer)
 {
-	int result = send(socket, buffer.GetBufferData(), buffer.GetSize(), 0);
+	int result;
+
+	result = send(socket, buffer.GetBufferData(), buffer.GetSize(), 0);
 	if (result == SOCKET_ERROR) {
 		TWONET_LOG_WARNING("Error while sending data.");
 		return false;
@@ -143,6 +143,37 @@ bool NetworkServer::ReceiveData(TwoNet::Buffer& receivedDataBuffer, SOCKET clien
 	}
 
 	return true;
+}
+
+void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> commands)
+{
+	int result;
+	std::map<std::string, Client>::iterator it;
+	for (it = m_Clients.begin(); it != m_Clients.end(); it++) {
+		SOCKET socket = it->second.Socket;
+		if (FD_ISSET(socket, &m_Readfds) && socket != m_ListenSocket) {
+			
+			TwoNet::Buffer buffer;
+			result = ReceiveData(buffer, socket);
+			if (!result)
+				continue;
+
+			const void* data = TwoNet::TwoProt::DeserializeData(buffer);
+			std::string command(static_cast<const char*>(data));
+
+
+			if (!commands.count(command)) {
+				TWONET_LOG_WARNING("Command could not be found: {0}", command);
+				continue;
+			}
+
+			result = commands[command](socket);
+			if (!result) {
+				TWONET_LOG_WARNING("Error while running command: {0}", command);
+				continue;
+			}
+		}
+	}
 }
 
 bool NetworkServer::CloseConnection(SOCKET clientSocket)

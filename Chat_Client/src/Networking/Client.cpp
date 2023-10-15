@@ -90,10 +90,10 @@ bool Client::ReceiveData(TwoNet::Buffer& receivedDataBuffer)
 	char buffer[maxBufferSize];
 	int totalBytesRead = 0;
 
-	while (true) {
-		int bytesRead = recv(m_ClientSocket, buffer, maxBufferSize, 0);
+	int bytesRead = recv(m_ClientSocket, buffer, maxBufferSize, 0);
 
-		if (bytesRead > 0) {
+	if (bytesRead > 0) {
+		while (true) {
 			// If there is data to be read.
 			receivedDataBuffer.WriteBuffer(buffer, bytesRead);
 			totalBytesRead += bytesRead;
@@ -102,15 +102,15 @@ bool Client::ReceiveData(TwoNet::Buffer& receivedDataBuffer)
 			if (bytesRead < maxBufferSize)
 				break;
 		}
-		else if (bytesRead == 0) {
-			// Clean disconnection
-			CloseConnection();
-			return false;
-		}
-		else {
-			// Error or disconnection
-			return false;
-		}
+	}
+	else if (bytesRead == 0) {
+		// Clean disconnection
+		CloseConnection();
+		return false;
+	}
+	else {
+		// Error or disconnection
+		return false;
 	}
 
 	return true;
