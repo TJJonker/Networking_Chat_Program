@@ -48,9 +48,29 @@ void Client::Terminate()
 
 bool Client::Connect()
 {
+	TWONET_LOG_TRACE("Trying to connect to the server...");
 	int result = connect(m_ClientSocket, m_ServerInfo->ai_addr, m_ServerInfo->ai_addrlen);
 	if (result == SOCKET_ERROR)
 		TERMINATE("Connection failed");
+
+	TwoNet::Buffer buffer;
+	std::string clientID = "Tom Jonker";
+	buffer.SerializeUInt_16(clientID.length());
+	buffer.SerializeString(clientID);
+
+
+	result = SendData(buffer);
+	if (result == 0) {
+		TWONET_LOG_WARNING("Failed to send initial data.");
+		return false;
+	}
+
+	buffer.Clear();
+	result = ReceiveData(buffer);
+	int dataLength = buffer.DeserializeUInt_16();
+	std::string message = buffer.DeserializeString(dataLength);
+
+	TWONET_LOG_TRACE(message);
 
 	return true;
 }
@@ -66,35 +86,44 @@ bool Client::SendData(TwoNet::Buffer& buffer)
 	return true;
 }
 
-bool Client::ReceiveData()
+bool Client::ReceiveData(TwoNet::Buffer& receivedDataBuffer)
 {
-	//const unsigned int maxBufferSize = 1024;
-	//char buffer[maxBufferSize];
-	//int totalBytesRead = 0;
+	const unsigned int maxBufferSize = 1024;
+	char buffer[maxBufferSize];
+	int totalBytesRead = 0;
 
-	//while (true) {
-	//	int bytesRead = recv(m_ClientSocket, buffer, maxBufferSize, 0);
+	while (true) {
+		int bytesRead = recv(m_ClientSocket, buffer, maxBufferSize, 0);
 
-	//	if (bytesRead > 0) {
-	//		// If there is data to be read.
-	//		receivedDataBuffer.WriteBuffer(buffer, bytesRead);
-	//		totalBytesRead += bytesRead;
+		if (bytesRead > 0) {
+			// If there is data to be read.
+			receivedDataBuffer.WriteBuffer(buffer, bytesRead);
+			totalBytesRead += bytesRead;
 
-	//		// If all the data is read.
-	//		if (bytesRead < maxBufferSize)
-	//			break;
-	//	}
-	//	else if (bytesRead == 0) {
-	//		// Clean disconnection
-	//		CloseConnection(m_ClientSocket);
-	//		return false;
-	//	}
-	//	else {
-	//		// Error or disconnection
-	//		return false;
-	//	}
-	//}
+			// If all the data is read.
+			if (bytesRead < maxBufferSize)
+				break;
+		}
+		else if (bytesRead == 0) {
+			// Clean disconnection
+			CloseConnection();
+			return false;
+		}
+		else {
+			// Error or disconnection
+			return false;
+		}
+	}
 
-	//return true;
+	return true;
+}
+
+bool Client::CloseConnection()
+{
+	if (m_ClientSocket != INVALID_SOCKET) {
+		closesocket(m_ClientSocket);
+		return true;
+	}
+
 	return false;
 }

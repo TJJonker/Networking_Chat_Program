@@ -21,6 +21,8 @@ public:
 	
 	bool Connect();
 	bool SendData(TwoNet::Buffer& buffer);
-	bool ReceiveData();
+	bool ReceiveData(TwoNet::Buffer& receivedDataBuffer);
+
+	bool CloseConnection();
 };
 

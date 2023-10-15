@@ -60,7 +60,7 @@ namespace TwoNet {
 	{
 		size_t messageSize = message.size();
 		EnsureCapacity(messageSize);
-		memcpy(&m_Buffer[m_WriteIndex], &message, messageSize);
+		memcpy(&m_Buffer[m_WriteIndex], message.c_str(), messageSize);
 		m_WriteIndex += messageSize;
 	}
 
