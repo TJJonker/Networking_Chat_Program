@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Client.h"
+#include "TwoNet/Protocols/TwoProt.h"
 
 #define TERMINATE(message) { TWONET_LOG_ERROR(message); Client::Terminate(); return false; }
 
@@ -55,9 +56,7 @@ bool Client::Connect()
 
 	TwoNet::Buffer buffer;
 	std::string clientID = "Tom Jonker";
-	buffer.SerializeUInt_16(clientID.length());
-	buffer.SerializeString(clientID);
-
+	TwoNet::TwoProt::SerializeData(buffer, clientID.c_str(), clientID.length());
 
 	result = SendData(buffer);
 	if (result == 0) {
@@ -67,9 +66,8 @@ bool Client::Connect()
 
 	buffer.Clear();
 	result = ReceiveData(buffer);
-	int dataLength = buffer.DeserializeUInt_16();
-	std::string message = buffer.DeserializeString(dataLength);
-
+	const void* data = TwoNet::TwoProt::DeserializeData(buffer);
+	std::string message(static_cast<const char*>(data));
 	TWONET_LOG_TRACE(message);
 
 	return true;
@@ -77,7 +75,7 @@ bool Client::Connect()
 
 bool Client::SendData(TwoNet::Buffer& buffer)
 {
-	int result = send(m_ClientSocket, buffer.GetData(), buffer.GetSize(), 0);
+	int result = send(m_ClientSocket, buffer.GetBufferData(), buffer.GetSize(), 0);
 	if (result == SOCKET_ERROR) {
 		TWONET_LOG_WARNING("Error while sending data.");
 		return false;

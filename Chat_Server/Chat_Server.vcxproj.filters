@@ -19,6 +19,7 @@
       <Filter>Server</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Server\Room.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -29,5 +30,6 @@
       <Filter>Server</Filter>
     </ClCompile>
     <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\Server\Room.cpp" />
   </ItemGroup>
 </Project>

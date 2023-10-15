@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "NetworkServer.h"
-
+#include <TwoNet/Protocols/TwoProt.h>
 
 #define TERMINATE(message) { TWONET_LOG_ERROR(message); NetworkServer::Terminate(); return false; }
 
@@ -79,7 +79,8 @@ void NetworkServer::ListenForConnections()
 			if (ReceiveData(buffer, newfd)) {
 				
 				int length = buffer.DeserializeUInt_16();
-				std::string clientID = buffer.DeserializeString(length);
+				const void* data = buffer.DeserializeData(length);
+				std::string clientID(static_cast<const char*>(data));
 				TWONET_LOG_TRACE("New ID: {0}", clientID);
 			}
 
@@ -87,8 +88,7 @@ void NetworkServer::ListenForConnections()
 
 			buffer.Clear();
 			std::string welcomeMessage = "Welcome to the Void!";
-			buffer.SerializeUInt_16(welcomeMessage.length());
-			buffer.SerializeString(welcomeMessage);
+			TwoNet::TwoProt::SerializeData(buffer, welcomeMessage.c_str(), welcomeMessage.length());
 			SendData(newfd, buffer);
 
 			TWONET_LOG_TRACE("Connection made.");
@@ -104,7 +104,7 @@ void NetworkServer::ListenForConnections()
 
 bool NetworkServer::SendData(SOCKET socket, TwoNet::Buffer& buffer)
 {
-	int result = send(socket, buffer.GetData(), buffer.GetSize(), 0);
+	int result = send(socket, buffer.GetBufferData(), buffer.GetSize(), 0);
 	if (result == SOCKET_ERROR) {
 		TWONET_LOG_WARNING("Error while sending data.");
 		return false;

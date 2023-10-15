@@ -3,13 +3,8 @@
 namespace TwoNet {
 	class TwoProt {
 
-	private:
-		Buffer& m_Buffer;
-
 	public:
-		TwoProt(Buffer& buffer);
-
-		void SerializeMessage(const std::string& message);
-		std::string DeserializeMessage();
+		static void SerializeData(TwoNet::Buffer& buffer, const void* data, size_t dataSize);
+		static const void* DeserializeData(TwoNet::Buffer& buffer);
 	};
 }

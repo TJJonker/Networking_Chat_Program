@@ -56,29 +56,29 @@ namespace TwoNet {
 		}
 	}
 
-	void Buffer::SerializeString(const std::string& message)
+	void Buffer::SerializeData(const void* data, size_t dataSize)
 	{
-		size_t messageSize = message.size();
-		EnsureCapacity(messageSize);
-		memcpy(&m_Buffer[m_WriteIndex], message.c_str(), messageSize);
-		m_WriteIndex += messageSize;
+		EnsureCapacity(dataSize);
+		memcpy(&m_Buffer[m_WriteIndex], data, dataSize);
+		m_WriteIndex += dataSize;
 	}
 
-	std::string Buffer::DeserializeString(size_t stringLength)
+	const void* Buffer::DeserializeData(size_t dataSize)
 	{
-		if (m_ReadIndex + stringLength <= m_Buffer.size()) {
-			std::string message(&m_Buffer[m_ReadIndex], stringLength);
-			return message;
+		if (m_ReadIndex + dataSize <= m_Buffer.size()) {
+			const void* data = &m_Buffer[m_ReadIndex];
+			m_ReadIndex += dataSize;
+			return data;
 		}
-		return "";
+		return nullptr;
 	}
 
-	const char* Buffer::GetData()
+	const char* Buffer::GetBufferData()
 	{
 		return m_Buffer.data();
 	}
 
-	void Buffer::WriteBuffer(const char* data, size_t dataSize)
+	void Buffer::WriteBuffer(const void* data, size_t dataSize)
 	{
 		EnsureCapacity(dataSize);
 		memcpy(&m_Buffer[m_WriteIndex], data, dataSize);

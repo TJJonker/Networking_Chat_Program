@@ -19,11 +19,11 @@ namespace TwoNet {
 		void SerializeUInt_16(uint16_t value);
 		uint32_t DeserializeUInt_16();
 
-		void SerializeString(const std::string& message);
-		std::string DeserializeString(size_t stringLength);
+		void SerializeData(const void* data, size_t dataSize);
+		const void* DeserializeData(size_t dataSize);
 
-		const char* GetData();
-		void WriteBuffer(const char* data, size_t dataSize);
+		const char* GetBufferData();
+		void WriteBuffer(const void* data, size_t dataSize);
 		void EnsureCapacity(size_t value);
 
 		size_t GetSize();

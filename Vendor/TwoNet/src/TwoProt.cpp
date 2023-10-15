@@ -2,20 +2,16 @@
 #include "Protocols/TwoProt.h"
 
 namespace TwoNet {
-	TwoProt::TwoProt(Buffer& buffer)
-		: m_Buffer(buffer) { }
-
-	void TwoProt::SerializeMessage(const std::string& message)
+	void TwoProt::SerializeData(TwoNet::Buffer& buffer, const void* data, size_t dataLength)
 	{
-		uint16_t messageLength = static_cast<uint16_t>(message.size());
-		m_Buffer.SerializeUInt_16(messageLength);
-		m_Buffer.SerializeString(message);
+		buffer.SerializeUInt_16(dataLength);
+		buffer.SerializeData(data, dataLength);
 	}
 
-	std::string TwoProt::DeserializeMessage()
+	const void* TwoProt::DeserializeData(TwoNet::Buffer& buffer)
 	{
-		uint16_t messageLength = m_Buffer.DeserializeUInt_16();
-		return m_Buffer.DeserializeString(messageLength);
+		uint16_t dataLength = buffer.DeserializeUInt_16();
+		return buffer.DeserializeData(dataLength);
 	}
 
 
