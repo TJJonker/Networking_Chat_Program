@@ -4,7 +4,7 @@
 class RoomManager
 {
 private:
-	std::map<std::string, Room> m_Rooms;
+	std::map<std::string, Room*> m_Rooms;
 
 public:
 	RoomManager();
@@ -14,5 +14,6 @@ public:
 	bool DeleteRoom(std::string name);
 
 	std::vector<std::string> GetRoomNames();
+	Room* GetRoom(std::string& name);
 };
 

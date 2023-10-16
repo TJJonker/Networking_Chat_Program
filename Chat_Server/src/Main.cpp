@@ -22,6 +22,10 @@ bool SendListOfRooms(SOCKET socket) {
 	return Commands::SendListOfRooms(socket, server, roomManager);
 }
 
+bool AddClientToRoom(SOCKET socket) {
+
+}
+
 
 int main() {
 
