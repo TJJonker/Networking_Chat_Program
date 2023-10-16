@@ -55,7 +55,7 @@ bool Client::Connect()
 		TERMINATE("Connection failed");
 
 	TwoNet::Buffer buffer;
-	std::string clientID = "Tom Jonker";
+	std::string clientID = "Not Tom Jonker";
 	TwoNet::TwoProt::SerializeData(buffer, clientID.c_str(), clientID.length());
 
 	result = SendData(buffer);

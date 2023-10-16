@@ -20,7 +20,7 @@ namespace TwoNet {
 		uint32_t DeserializeUInt_16();
 
 		void SerializeData(const void* data, size_t dataSize);
-		const void* DeserializeData(size_t dataSize);
+		const char* DeserializeData(size_t dataSize);
 
 		const char* GetBufferData();
 		void WriteBuffer(const void* data, size_t dataSize);

@@ -13,6 +13,9 @@
     <Filter Include="include\TwoNet\Protocols">
       <UniqueIdentifier>{6DF0E768-5915-37E9-8260-1C796EE43507}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\TwoNet\Serialization">
+      <UniqueIdentifier>{466BC099-3226-B045-DBDD-2890C777FAD5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -24,6 +27,9 @@
     <ClInclude Include="include\TwoNet\Protocols\TwoProt.h">
       <Filter>include\TwoNet\Protocols</Filter>
     </ClInclude>
+    <ClInclude Include="include\TwoNet\Serialization\Serialization.h">
+      <Filter>include\TwoNet\Serialization</Filter>
+    </ClInclude>
     <ClInclude Include="include\TwoNet\tpch.h">
       <Filter>include\TwoNet</Filter>
     </ClInclude>
@@ -33,6 +39,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Serialization.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\TwoProt.cpp">

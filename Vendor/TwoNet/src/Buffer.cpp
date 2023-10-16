@@ -60,14 +60,14 @@ namespace TwoNet {
 	{
 		EnsureCapacity(dataSize);
 		memcpy(&m_Buffer[m_WriteIndex], data, dataSize);
-		m_WriteIndex += dataSize;
+		m_WriteIndex += dataSize + 1;
 	}
 
-	const void* Buffer::DeserializeData(size_t dataSize)
+	const char* Buffer::DeserializeData(size_t dataSize)
 	{
 		if (m_ReadIndex + dataSize <= m_Buffer.size()) {
-			const void* data = &m_Buffer[m_ReadIndex];
-			m_ReadIndex += dataSize;
+			const char* data = &m_Buffer[m_ReadIndex];
+			m_ReadIndex += dataSize + 1;
 			return data;
 		}
 		return nullptr;

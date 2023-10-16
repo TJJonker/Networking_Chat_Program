@@ -53,11 +53,13 @@
   <ItemGroup>
     <ClInclude Include="include\TwoNet\Buffer\Buffer.h" />
     <ClInclude Include="include\TwoNet\Protocols\TwoProt.h" />
+    <ClInclude Include="include\TwoNet\Serialization\Serialization.h" />
     <ClInclude Include="include\TwoNet\tpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Buffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Serialization.cpp" />
     <ClCompile Include="src\TwoProt.cpp" />
     <ClCompile Include="src\tpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

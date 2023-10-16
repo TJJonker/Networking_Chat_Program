@@ -152,6 +152,9 @@ void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> 
 	for (it = m_Clients.begin(); it != m_Clients.end(); it++) {
 		SOCKET socket = it->second.Socket;
 		if (FD_ISSET(socket, &m_Readfds) && socket != m_ListenSocket) {
+
+			TWONET_LOG_TRACE("Received data.");
+
 			
 			TwoNet::Buffer buffer;
 			result = ReceiveData(buffer, socket);
@@ -172,6 +175,8 @@ void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> 
 				TWONET_LOG_WARNING("Error while running command: {0}", command);
 				continue;
 			}
+
+			FD_CLR(socket, &m_Readfds);
 		}
 	}
 }
