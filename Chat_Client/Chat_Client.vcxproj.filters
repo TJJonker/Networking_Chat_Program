@@ -18,10 +18,8 @@
     <ClInclude Include="src\Networking\Client.h">
       <Filter>Networking</Filter>
     </ClInclude>
-    <ClInclude Include="src\Networking\Room.h">
-      <Filter>Networking</Filter>
-    </ClInclude>
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Networking\Networking.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -31,9 +29,7 @@
     <ClCompile Include="src\Networking\Client.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="src\Networking\Room.cpp">
-      <Filter>Networking</Filter>
-    </ClCompile>
     <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\Networking\Networking.cpp" />
   </ItemGroup>
 </Project>

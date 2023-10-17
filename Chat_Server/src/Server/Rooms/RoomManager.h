@@ -10,7 +10,7 @@ public:
 	RoomManager();
 	~RoomManager();
 
-	bool AddRoom(std::string name = "");
+	bool AddRoom(std::string name = "", Room* room = nullptr);
 	bool DeleteRoom(std::string name);
 
 	std::vector<std::string> GetRoomNames();

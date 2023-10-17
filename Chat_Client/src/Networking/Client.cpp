@@ -47,7 +47,7 @@ void Client::Terminate()
 	WSACleanup();
 }
 
-bool Client::Connect()
+bool Client::Connect(std::string clientID)
 {
 	TWONET_LOG_TRACE("Trying to connect to the server...");
 	int result = connect(m_ClientSocket, m_ServerInfo->ai_addr, m_ServerInfo->ai_addrlen);
@@ -55,7 +55,6 @@ bool Client::Connect()
 		TERMINATE("Connection failed");
 
 	TwoNet::Buffer buffer;
-	std::string clientID = " ";
 	TwoNet::TwoProt::SerializeData(buffer, clientID.c_str(), clientID.length());
 
 	result = SendData(buffer);

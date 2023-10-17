@@ -10,18 +10,17 @@ RoomManager::~RoomManager()
 		delete it->second;
 }
 
-bool RoomManager::AddRoom(std::string name)
+bool RoomManager::AddRoom(std::string name, Room* room)
 {
 	static unsigned int roomID = 1;
 	name = name == "" ? "Room " + std::to_string(roomID++) : name;
-	TWONET_LOG_INFO("New room name: {0}", name);
 
 	if (m_Rooms.count(name)) {
 		TWONET_LOG_WARNING("Failed to add room. Room name '{0}' already exists.", name);
 		return false;
 	}
-	
-	m_Rooms.insert({ name, new Room(name) });
+	room = new Room(name);
+	m_Rooms.insert({ name, room });
 
 	return true;
 }
