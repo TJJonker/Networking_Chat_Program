@@ -36,22 +36,22 @@ int main() {
 			TWONET_LOG_INFO("Join: {0}", name);
 	}
 
-	{
-		buffer.Clear();
-		const char* thing2 = buffer.GetBufferData();
-		std::string command = "JOIN_ROOM";
-		std::string roomName = "Crazy Room 2";
-		TwoNet::TwoProt::SerializeData(buffer, command.c_str(), command.length());
-		TwoNet::TwoProt::SerializeData(buffer, roomName.c_str(), roomName.length());
-		const char* thing = buffer.GetBufferData();
-		client.SendData(buffer);
-	}
+	//{
+	//	buffer.Clear();
+	//	const char* thing2 = buffer.GetBufferData();
+	//	std::string command = "JOIN_ROOM";
+	//	std::string roomName = "Crazy Room 2";
+	//	TwoNet::TwoProt::SerializeData(buffer, command.c_str(), command.length());
+	//	TwoNet::TwoProt::SerializeData(buffer, roomName.c_str(), roomName.length());
+	//	const char* thing = buffer.GetBufferData();
+	//	client.SendData(buffer);
+	//}
 
-	{
-		buffer.Clear();
-		if (!client.ReceiveData(buffer)) {
-			TWONET_LOG_TRACE("Failed to collect data.");
-		}
-		const char* data = TwoNet::TwoProt::DeserializeData(buffer);
-	}
+	//{
+	//	buffer.Clear();
+	//	if (!client.ReceiveData(buffer)) {
+	//		TWONET_LOG_TRACE("Failed to collect data.");
+	//	}
+	//	const char* data = TwoNet::TwoProt::DeserializeData(buffer);
+	//}
 }

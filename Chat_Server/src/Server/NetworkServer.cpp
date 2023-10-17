@@ -158,15 +158,12 @@ void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> 
 	for (it = m_Clients.begin(); it != m_Clients.end(); it++) {
 		SOCKET socket = it->first;
 		if (FD_ISSET(socket, &m_Readfds) && socket != m_ListenSocket) {
-			//TWONET_LOG_TRACE("Received data.");
 
 			// Data
 			TwoNet::Buffer buffer;
 			result = ReceiveData(buffer, socket);
 			if (!result)
 				continue;
-
-			TWONET_LOG_TRACE("Check 1");
 
 			const char* data = TwoNet::TwoProt::DeserializeData(buffer);
 			std::string command(data);
@@ -177,24 +174,18 @@ void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> 
 				continue;
 			}
 
-			TWONET_LOG_TRACE("Check 2");
-
 			// Retrieve important data
 			if (!m_Clients.count(socket)) {
 				TWONET_LOG_WARNING("Failed retrieving client. No entry with given socket");
 				continue;
 			}
 
-			TWONET_LOG_TRACE("Check 3");
-
 			// Run command
 			result = commands[command](m_Clients[socket], buffer);
-			TWONET_LOG_TRACE("Check 4");
 			if (!result) {
 				TWONET_LOG_WARNING("Error while running command: {0}", command);
 				continue;
 			}
-			TWONET_LOG_TRACE("Check 5");
 
 			//FD_CLR(socket, &m_Readfds);
 		}

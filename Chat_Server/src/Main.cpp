@@ -38,9 +38,9 @@ int main() {
 	commands.insert({ "LIST_ROOMS", SendListOfRooms});
 	commands.insert({ "JOIN_ROOM", AddClientToRoom }); 
 
-	roomManager.AddRoom("Chillinging Room 1");
-	roomManager.AddRoom("Crazy Room 2");
-	roomManager.AddRoom("Seducing Room 3");
+	roomManager.AddRoom();
+	roomManager.AddRoom();
+	roomManager.AddRoom();
 
 	int result;
 	result = server.Initialize();

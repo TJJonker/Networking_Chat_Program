@@ -13,7 +13,8 @@ RoomManager::~RoomManager()
 bool RoomManager::AddRoom(std::string name)
 {
 	static unsigned int roomID = 1;
-	name = name == "" ? "Room " + roomID++ : name;
+	name = name == "" ? "Room " + std::to_string(roomID++) : name;
+	TWONET_LOG_INFO("New room name: {0}", name);
 
 	if (m_Rooms.count(name)) {
 		TWONET_LOG_WARNING("Failed to add room. Room name '{0}' already exists.", name);
