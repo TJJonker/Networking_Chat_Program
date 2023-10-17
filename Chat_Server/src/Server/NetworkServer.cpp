@@ -16,6 +16,9 @@ bool NetworkServer::Initialize()
 {
 	int result;
 
+	m_Timeout.tv_sec = 0; 
+	m_Timeout.tv_usec = 0; 
+
 	// Initializing
 	result = WSAStartup(MAKEWORD(2, 2), &m_WsaData);
 	if (result)
@@ -60,7 +63,7 @@ void NetworkServer::ListenForConnections()
 	fd_set temp = m_Readfds;
 	int result;
 
-	result = select(m_ListenSocket + 1, &temp, NULL, NULL, NULL);
+	result = select(m_ListenSocket + m_Clients.size() + 1, &temp, NULL, NULL, &m_Timeout);
 	if (result == SOCKET_ERROR) {
 		TWONET_LOG_ERROR("Select error... (ERROR: {0})", WSAGetLastError());
 		return;
@@ -83,7 +86,10 @@ void NetworkServer::ListenForConnections()
 				
 			const void* data = TwoNet::TwoProt::DeserializeData(buffer);
 			std::string clientID(static_cast<const char*>(data));
-			m_Clients.insert({ clientID, {newfd, clientID}});
+			static int ID = 1;
+			clientID = clientID == " " ? std::to_string(ID++) : clientID;
+
+			m_Clients.insert({ newfd, std::make_shared<Client>(newfd, clientID) });
 			TWONET_LOG_TRACE("New ID: {0}", clientID);
 		}
 
@@ -148,35 +154,49 @@ bool NetworkServer::ReceiveData(TwoNet::Buffer& receivedDataBuffer, SOCKET clien
 void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> commands)
 {
 	int result;
-	std::map<std::string, Client>::iterator it;
+	std::map<SOCKET, std::shared_ptr<Client>>::iterator it;
 	for (it = m_Clients.begin(); it != m_Clients.end(); it++) {
-		SOCKET socket = it->second.Socket;
+		SOCKET socket = it->first;
 		if (FD_ISSET(socket, &m_Readfds) && socket != m_ListenSocket) {
+			//TWONET_LOG_TRACE("Received data.");
 
-			TWONET_LOG_TRACE("Received data.");
-
-			
+			// Data
 			TwoNet::Buffer buffer;
 			result = ReceiveData(buffer, socket);
 			if (!result)
 				continue;
 
-			const void* data = TwoNet::TwoProt::DeserializeData(buffer);
-			std::string command(static_cast<const char*>(data));
+			TWONET_LOG_TRACE("Check 1");
 
+			const char* data = TwoNet::TwoProt::DeserializeData(buffer);
+			std::string command(data);
 
+			// Check command
 			if (!commands.count(command)) {
 				TWONET_LOG_WARNING("Command could not be found: {0}", command);
 				continue;
 			}
 
-			result = commands[command](socket);
+			TWONET_LOG_TRACE("Check 2");
+
+			// Retrieve important data
+			if (!m_Clients.count(socket)) {
+				TWONET_LOG_WARNING("Failed retrieving client. No entry with given socket");
+				continue;
+			}
+
+			TWONET_LOG_TRACE("Check 3");
+
+			// Run command
+			result = commands[command](m_Clients[socket], buffer);
+			TWONET_LOG_TRACE("Check 4");
 			if (!result) {
 				TWONET_LOG_WARNING("Error while running command: {0}", command);
 				continue;
 			}
+			TWONET_LOG_TRACE("Check 5");
 
-			FD_CLR(socket, &m_Readfds);
+			//FD_CLR(socket, &m_Readfds);
 		}
 	}
 }

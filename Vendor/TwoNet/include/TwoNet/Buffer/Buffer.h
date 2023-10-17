@@ -19,7 +19,7 @@ namespace TwoNet {
 		void SerializeUInt_16(uint16_t value);
 		uint32_t DeserializeUInt_16();
 
-		void SerializeData(const void* data, size_t dataSize);
+		void SerializeData(const char* data, size_t dataSize);
 		const char* DeserializeData(size_t dataSize);
 
 		const char* GetBufferData();
@@ -27,6 +27,7 @@ namespace TwoNet {
 		void EnsureCapacity(size_t value);
 
 		size_t GetSize();
+		size_t GetBufferSize() { return m_Buffer.size(); }
 		void Clear();
 	};
 }

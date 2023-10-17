@@ -1,5 +1,6 @@
 #include "tpch.h"
 #include "Buffer/Buffer.h"
+#include <iostream>
 
 namespace TwoNet {
 
@@ -56,10 +57,11 @@ namespace TwoNet {
 		}
 	}
 
-	void Buffer::SerializeData(const void* data, size_t dataSize)
+	void Buffer::SerializeData(const char* data, size_t dataSize)
 	{
 		EnsureCapacity(dataSize);
 		memcpy(&m_Buffer[m_WriteIndex], data, dataSize);
+		data += '\0';
 		m_WriteIndex += dataSize + 1;
 	}
 
@@ -98,8 +100,11 @@ namespace TwoNet {
 
 	void Buffer::Clear()
 	{
+		for (int i = 0; i < m_WriteIndex; i++) {
+			m_Buffer[i] = '\0';
+		}
+		
 		m_WriteIndex = 0;
 		m_ReadIndex = 0;
-		m_Buffer.clear();
 	}
 }

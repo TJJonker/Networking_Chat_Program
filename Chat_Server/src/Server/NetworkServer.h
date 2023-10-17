@@ -1,13 +1,17 @@
 #pragma once
 #include <TwoNet/Buffer/Buffer.h>
 
-using CommandFunction = std::function<bool(SOCKET)>;
 
 
 struct Client {
+	Client(SOCKET socket, std::string clientID) 
+		: Socket(socket), ClientID(clientID) {}
+
 	SOCKET Socket;
 	std::string ClientID;
 };
+
+using CommandFunction = std::function<bool(std::shared_ptr<Client>, TwoNet::Buffer& buffer)>;
 
 class NetworkServer
 {
@@ -20,7 +24,9 @@ private:
 	const char* m_IP;
 	const char* m_Port;
 
-	std::map<std::string, Client> m_Clients;
+	struct timeval m_Timeout;
+
+	std::map<SOCKET, std::shared_ptr<Client>> m_Clients;
 
 public:
 	NetworkServer(const char* ip, const char* port);

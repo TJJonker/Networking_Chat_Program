@@ -50,7 +50,7 @@ std::vector<std::string> RoomManager::GetRoomNames()
 Room* RoomManager::GetRoom(std::string& name)
 {
 	if (!m_Rooms.count(name)) {
-		TWONET_LOG_WARNING("Failed returning room. Room with name '{0}' does not exist.");
+		TWONET_LOG_WARNING("Failed returning room. Room with name {0} does not exist.", name);
 		return nullptr;
 	}
 

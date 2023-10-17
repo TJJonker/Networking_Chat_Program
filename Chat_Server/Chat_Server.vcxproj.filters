@@ -27,6 +27,9 @@
     <ClInclude Include="src\Server\NetworkServer.h">
       <Filter>Server</Filter>
     </ClInclude>
+    <ClInclude Include="src\Server\Rooms\Message.h">
+      <Filter>Server\Rooms</Filter>
+    </ClInclude>
     <ClInclude Include="src\Server\Rooms\Room.h">
       <Filter>Server\Rooms</Filter>
     </ClInclude>

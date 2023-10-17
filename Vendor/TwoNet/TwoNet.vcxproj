@@ -55,6 +55,7 @@
     <ClInclude Include="include\TwoNet\Protocols\TwoProt.h" />
     <ClInclude Include="include\TwoNet\Serialization\Serialization.h" />
     <ClInclude Include="include\TwoNet\tpch.h" />
+    <ClInclude Include="include\TwoNet\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Buffer.cpp" />

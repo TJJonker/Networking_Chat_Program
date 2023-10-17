@@ -17,21 +17,26 @@ RoomManager roomManager;
 
 std::map<std::string, CommandFunction> commands;
 
-
-bool SendListOfRooms(SOCKET socket) {
-	return Commands::SendListOfRooms(socket, server, roomManager);
+bool SendListOfRooms(std::shared_ptr<Client> client, TwoNet::Buffer& buffer) {
+	return Commands::SendListOfRooms(client, server, roomManager);
 }
 
-bool AddClientToRoom(SOCKET socket) {
-
+bool AddClientToRoom(std::shared_ptr<Client> client, TwoNet::Buffer& buffer) {
+	const char* roomName = TwoNet::TwoProt::DeserializeData(buffer);
+	return Commands::AddClientToRooms(client, roomName, server, roomManager);
 }
+
+//bool SendMessage(SOCKET socket, TwoNet::Buffer&) {
+//
+//}
 
 
 int main() {
 
 	TwoNet::Log::Init();
 
-	commands.insert({ "LIST_ROOMS", SendListOfRooms }); 
+	commands.insert({ "LIST_ROOMS", SendListOfRooms});
+	commands.insert({ "JOIN_ROOM", AddClientToRoom }); 
 
 	roomManager.AddRoom("Chillinging Room 1");
 	roomManager.AddRoom("Crazy Room 2");

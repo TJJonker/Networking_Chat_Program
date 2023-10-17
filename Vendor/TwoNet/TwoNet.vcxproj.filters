@@ -33,6 +33,7 @@
     <ClInclude Include="include\TwoNet\tpch.h">
       <Filter>include\TwoNet</Filter>
     </ClInclude>
+    <ClInclude Include="include\TwoNet\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Buffer.cpp">

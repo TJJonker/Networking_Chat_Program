@@ -58,6 +58,7 @@
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Server\Commands\Commands.h" />
     <ClInclude Include="src\Server\NetworkServer.h" />
+    <ClInclude Include="src\Server\Rooms\Message.h" />
     <ClInclude Include="src\Server\Rooms\Room.h" />
     <ClInclude Include="src\Server\Rooms\RoomManager.h" />
     <ClInclude Include="src\pch.h" />
