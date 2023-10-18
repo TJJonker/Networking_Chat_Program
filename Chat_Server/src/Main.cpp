@@ -31,6 +31,21 @@ bool AddClientToRoom(std::shared_ptr<Client> client, TwoNet::Buffer& buffer) {
 //}
 
 
+void OnMessageSentCallback(const std::shared_ptr<Client> client, const Message* message) {
+	TwoNet::Buffer buffer;
+	TwoNet::TwoProt::SerializeData(buffer, message->Text.c_str(), message->Text.length());
+	server.SendData(client->Socket, buffer);
+}
+
+void OnClientJoined(const std::shared_ptr<Client> client) {
+	std::string welcomeMessage(client->ClientID + " Joined the room! Welcome!");
+	TWONET_LOG_ERROR("Did it work?");
+	TwoNet::Buffer buffer;
+	TwoNet::TwoProt::SerializeData(buffer, welcomeMessage.c_str(), welcomeMessage.length());
+	server.SendData(client->Socket, buffer);
+}
+
+
 int main() {
 
 	TwoNet::Log::Init();
@@ -38,9 +53,24 @@ int main() {
 	commands.insert({ "LIST_ROOMS", SendListOfRooms });
 	commands.insert({ "JOIN_ROOM", AddClientToRoom }); 
 
-	roomManager.AddRoom();
-	roomManager.AddRoom();
-	roomManager.AddRoom();
+	std::string roomName1 = "R1";
+	std::string roomName2 = "R2";
+	std::string roomName3 = "R3";
+
+	roomManager.AddRoom(roomName1);
+	roomManager.AddRoom(roomName2);
+	roomManager.AddRoom(roomName3);
+
+	Room* room1 = roomManager.GetRoom(roomName1);
+	Room* room2 = roomManager.GetRoom(roomName2);
+	Room* room3 = roomManager.GetRoom(roomName3);
+
+	room1->SetCallback_OnMessageSent(OnMessageSentCallback);
+	room1->SetCallback_OnClientJoined(OnClientJoined);
+	room2->SetCallback_OnMessageSent(OnMessageSentCallback);
+	room2->SetCallback_OnClientJoined(OnClientJoined);
+	room3->SetCallback_OnMessageSent(OnMessageSentCallback);
+	room3->SetCallback_OnClientJoined(OnClientJoined);
 
 	int result;
 	result = server.Initialize();

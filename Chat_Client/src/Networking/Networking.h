@@ -18,5 +18,7 @@ public:
 
 	bool RequestRooms(std::function<void(std::vector<std::string>)> callback);
 	bool RequestJoinRoom(std::string roomName, std::function<void(std::string)> callback);
+
+	bool CheckIncomingMessages(std::function<void(std::string)> callback);
 };
 

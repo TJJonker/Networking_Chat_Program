@@ -14,7 +14,6 @@ int main() {
 	networking->Initialize("127.0.0.1", "8412");  
 	StateManager* stateManager = new StateManager();   
 	
-
 	std::map<StateManager::AppState, State*> states;
 
 	states.insert({ StateManager::AppState::CONNECTING, new ConnectingState(stateManager, networking)});

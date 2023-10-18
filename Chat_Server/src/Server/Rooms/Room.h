@@ -8,10 +8,8 @@ private:
 	size_t m_MaxConnections;
 	std::map<SOCKET, std::shared_ptr<Client>> m_ConnectedClients;
 
-	std::vector<Message*> m_Messages;
-
 	std::function<void(const std::shared_ptr<Client>, const Message* message)> m_OnMessageSent;
-	std::function<void(const std::shared_ptr<Client>, const std::vector<Message*>& messageList)> m_onClientJoined;
+	std::function<void(const std::shared_ptr<Client>)> m_onClientJoined;
 
 public:
 	Room(std::string name, size_t maxConnections = 10);
@@ -23,6 +21,6 @@ public:
 	void SendChatMessage(const std::shared_ptr<Client> client, std::string& message);
 
 	void SetCallback_OnMessageSent(std::function<void(const std::shared_ptr<Client>, const Message* message)> onMessageSent);
-	void SetCallback_OnClientJoined(std::function<void(const std::shared_ptr<Client>, const std::vector<Message*>& messageList)> onClientJoined);
+	void SetCallback_OnClientJoined(std::function<void(const std::shared_ptr<Client>)> onClientJoined);
 };
 

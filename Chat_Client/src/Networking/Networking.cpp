@@ -85,3 +85,20 @@ bool Networking::RequestJoinRoom(std::string roomName, std::function<void(std::s
     return true;
 }
 
+bool Networking::CheckIncomingMessages(std::function<void(std::string)> callback)
+{
+    std::thread([&, callback]()
+        {
+            int result;
+            TwoNet::Buffer buffer;
+
+            result = m_Client->ReceiveData(buffer);
+            if (result) {
+                const char* data = TwoNet::TwoProt::DeserializeData(buffer);
+                callback(data);
+            }
+        }
+    ).detach();
+    return true;
+}
+

@@ -63,7 +63,7 @@ void NetworkServer::ListenForConnections()
 	fd_set temp = m_Readfds;
 	int result;
 
-	result = select(m_ListenSocket + m_Clients.size() + 1, &temp, NULL, NULL, &m_Timeout);
+	result = select(m_ListenSocket, &temp, NULL, NULL, &m_Timeout);
 	if (result == SOCKET_ERROR) {
 		TWONET_LOG_ERROR("Select error... (ERROR: {0})", WSAGetLastError());
 		return;
@@ -154,10 +154,15 @@ bool NetworkServer::ReceiveData(TwoNet::Buffer& receivedDataBuffer, SOCKET clien
 void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> commands)
 {
 	int result;
+	fd_set temp = m_Readfds;
+
 	std::map<SOCKET, std::shared_ptr<Client>>::iterator it;
 	for (it = m_Clients.begin(); it != m_Clients.end(); it++) {
 		SOCKET socket = it->first;
-		if (FD_ISSET(socket, &m_Readfds) && socket != m_ListenSocket) {
+		result = select(socket, &temp, NULL, NULL, &m_Timeout);
+
+		if (FD_ISSET(socket, &temp) && socket != m_ListenSocket) {
+	TWONET_LOG_ERROR("check11");
 
 			// Data
 			TwoNet::Buffer buffer;
@@ -165,21 +170,25 @@ void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> 
 			if (!result)
 				continue;
 
+	TWONET_LOG_ERROR("check12");
 			const char* data = TwoNet::TwoProt::DeserializeData(buffer);
 			std::string command(data);
 
+	TWONET_LOG_ERROR("check13");
 			// Check command
 			if (!commands.count(command)) {
 				TWONET_LOG_WARNING("Command could not be found: {0}", command);
 				continue;
 			}
 
+	TWONET_LOG_ERROR("check14");
 			// Retrieve important data
 			if (!m_Clients.count(socket)) {
 				TWONET_LOG_WARNING("Failed retrieving client. No entry with given socket");
 				continue;
 			}
 
+	TWONET_LOG_ERROR("check15");
 			// Run command
 			result = commands[command](m_Clients[socket], buffer);
 			if (!result) {
@@ -187,7 +196,7 @@ void NetworkServer::ReceiveAndHandleData(std::map<std::string, CommandFunction> 
 				continue;
 			}
 
-			//FD_CLR(socket, &m_Readfds);
+			FD_CLR(socket, &temp);
 		}
 	}
 }
