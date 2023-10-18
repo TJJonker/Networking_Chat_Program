@@ -16,6 +16,9 @@
     <Filter Include="include\TwoNet\Serialization">
       <UniqueIdentifier>{466BC099-3226-B045-DBDD-2890C777FAD5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\TwoNet\Utils">
+      <UniqueIdentifier>{196BE18C-05FA-6A56-AE18-7F519A867BFC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -30,10 +33,12 @@
     <ClInclude Include="include\TwoNet\Serialization\Serialization.h">
       <Filter>include\TwoNet\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="include\TwoNet\Utils\Utils.h">
+      <Filter>include\TwoNet\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="include\TwoNet\tpch.h">
       <Filter>include\TwoNet</Filter>
     </ClInclude>
-    <ClInclude Include="include\TwoNet\Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Buffer.cpp">

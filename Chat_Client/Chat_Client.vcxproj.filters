@@ -7,6 +7,12 @@
     <Filter Include="Networking">
       <UniqueIdentifier>{6D615D47-5919-9F94-C220-78F0AEF73985}</UniqueIdentifier>
     </Filter>
+    <Filter Include="StateMachine">
+      <UniqueIdentifier>{BB54AC3C-A7B7-3BE1-503D-74973C7F0764}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StateMachine\States">
+      <UniqueIdentifier>{1EEE13DD-8A4F-F1EA-13BD-379D7F1D28AA}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debug\Assertion.h">
@@ -18,8 +24,25 @@
     <ClInclude Include="src\Networking\Client.h">
       <Filter>Networking</Filter>
     </ClInclude>
+    <ClInclude Include="src\Networking\Networking.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateMachine\State.h">
+      <Filter>StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateMachine\StateManager.h">
+      <Filter>StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateMachine\States\ConnectingState.h">
+      <Filter>StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateMachine\States\LobbyState.h">
+      <Filter>StateMachine\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StateMachine\States\RoomState.h">
+      <Filter>StateMachine\States</Filter>
+    </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Networking\Networking.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -29,7 +52,21 @@
     <ClCompile Include="src\Networking\Client.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
+    <ClCompile Include="src\Networking\Networking.cpp">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateMachine\StateManager.cpp">
+      <Filter>StateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateMachine\States\ConnectingState.cpp">
+      <Filter>StateMachine\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateMachine\States\LobbyState.cpp">
+      <Filter>StateMachine\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StateMachine\States\RoomState.cpp">
+      <Filter>StateMachine\States</Filter>
+    </ClCompile>
     <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\Networking\Networking.cpp" />
   </ItemGroup>
 </Project>

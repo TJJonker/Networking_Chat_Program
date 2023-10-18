@@ -54,17 +54,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Networking\Networking.h" />
     <ClInclude Include="src\Debug\Assertion.h" />
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Networking\Client.h" />
+    <ClInclude Include="src\Networking\Networking.h" />
+    <ClInclude Include="src\StateMachine\State.h" />
+    <ClInclude Include="src\StateMachine\StateManager.h" />
+    <ClInclude Include="src\StateMachine\States\ConnectingState.h" />
+    <ClInclude Include="src\StateMachine\States\LobbyState.h" />
+    <ClInclude Include="src\StateMachine\States\RoomState.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Networking\Networking.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Networking\Client.cpp" />
+    <ClCompile Include="src\Networking\Networking.cpp" />
+    <ClCompile Include="src\StateMachine\StateManager.cpp" />
+    <ClCompile Include="src\StateMachine\States\ConnectingState.cpp" />
+    <ClCompile Include="src\StateMachine\States\LobbyState.cpp" />
+    <ClCompile Include="src\StateMachine\States\RoomState.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

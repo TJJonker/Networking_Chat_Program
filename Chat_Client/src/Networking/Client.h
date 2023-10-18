@@ -19,7 +19,7 @@ public:
 	bool Initialize();
 	void Terminate();
 	
-	bool Connect(std::string clientID = "");
+	bool Connect(std::string clientID = "", std::string* connectionMessage = nullptr);
 	bool SendData(TwoNet::Buffer& buffer);
 	bool ReceiveData(TwoNet::Buffer& receivedDataBuffer);
 

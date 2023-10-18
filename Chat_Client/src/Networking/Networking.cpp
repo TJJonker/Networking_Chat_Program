@@ -22,9 +22,9 @@ void Networking::Destroy()
 	delete m_Client;
 }
 
-bool Networking::Connect(std::string clientID)
+bool Networking::Connect(std::string clientID, std::string* welcomeMessage)
 {
-	return m_Client->Connect(clientID);
+	return m_Client->Connect(clientID, welcomeMessage);
 }
 
 bool Networking::RequestRooms(std::function<void(std::vector<std::string>)> callback)
@@ -38,28 +38,50 @@ bool Networking::RequestRooms(std::function<void(std::vector<std::string>)> call
 	if (!result) 
 		return false;
 
+    buffer.Clear();
+
+    result = m_Client->ReceiveData(buffer);
+    if (!result)
+        return false;
+
+    std::vector<std::string> roomNames;
+    while (true) {
+        const char* data = TwoNet::TwoProt::DeserializeData(buffer);
+        if (data == nullptr)
+            break;
+        roomNames.push_back(data);
+    }
+    callback(roomNames);
+ 
+	return true;
+}
+
+bool Networking::RequestJoinRoom(std::string roomName, std::function<void(std::string)> callback)
+{
+    int result;
+    TwoNet::Buffer buffer;
+    std::string command = "JOIN_ROOM";
+    TwoNet::TwoProt::SerializeData(buffer, command.c_str(), command.length()); 
+    TwoNet::TwoProt::SerializeData(buffer, roomName.c_str(), roomName.length());
+
+    result = m_Client->SendData(buffer); 
+    if (!result)
+        return false;
+
     std::thread([&, callback]()
         {
-            std::this_thread::sleep_for(std::chrono::seconds(2));
-
             int result;
-            TwoNet::Buffer buffer; 
+            TwoNet::Buffer buffer;
 
             result = m_Client->ReceiveData(buffer);
             if (result) {
-                std::vector<std::string> roomNames;
-                while (true) {
-                    const char* data = TwoNet::TwoProt::DeserializeData(buffer);
-                    if (data == nullptr)
-                        break;
-                    roomNames.push_back(data);
-                }
-                callback(roomNames);
+                const char* data = TwoNet::TwoProt::DeserializeData(buffer);
+                if (data)
+                    callback(data);
             }
         }
     ).detach();
-
-	TWONET_LOG_INFO("This log should come before the rooms 2.");
-	return true;
+    
+    return true;
 }
 

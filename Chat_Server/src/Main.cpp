@@ -35,7 +35,7 @@ int main() {
 
 	TwoNet::Log::Init();
 
-	commands.insert({ "LIST_ROOMS", SendListOfRooms});
+	commands.insert({ "LIST_ROOMS", SendListOfRooms });
 	commands.insert({ "JOIN_ROOM", AddClientToRoom }); 
 
 	roomManager.AddRoom();
