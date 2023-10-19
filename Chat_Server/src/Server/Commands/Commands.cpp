@@ -56,8 +56,6 @@ bool Commands::SendNewMessage(std::shared_ptr<Client> client, std::string messag
 	response = TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::SUCCESS); 
 	TwoNet::TwoProt::SerializeData(buffer, response.c_str(), response.length()); 
 	server.SendData(client->Socket, buffer); 
-	const char* res = TwoNet::TwoProt::DeserializeData(buffer);
-	TWONET_LOG_TRACE(res);
 
 	return true;
 }
@@ -90,6 +88,13 @@ bool Commands::GetMessages(std::shared_ptr<Client> client, NetworkServer& server
 	std::string response;
 
 	Room* room = roomManager.GetRoom(client->Socket);
+	if (!room) {
+		response = TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::FAILED); 
+		TwoNet::TwoProt::SerializeData(buffer, response.c_str(), response.length()); 
+		server.SendData(client->Socket, buffer); 
+		return false;
+	}
+	
 	std::vector<std::string> messages = room->GetMessages();
 
 	for (std::string message : messages) 

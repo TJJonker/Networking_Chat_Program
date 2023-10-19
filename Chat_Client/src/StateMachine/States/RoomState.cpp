@@ -11,6 +11,8 @@ RoomState::~RoomState() { }
 
 void RoomState::OnEnter() 
 {
+	system("cls");
+	m_ChangeState = false;
 	GetUserInput();
 	RetrieveMessages();
 }
@@ -18,12 +20,12 @@ void RoomState::OnEnter()
 void RoomState::OnExit()
 {
 	m_AmountOfMessages = 0;
+	system("cls");
 }
 
 
 void RoomState::GetUserInput()
 {
-	TWONET_LOG_INFO("check");
 	std::thread([&]()
 		{
 			std::string input;
@@ -65,7 +67,7 @@ void RoomState::GetUserInput()
 void RoomState::RetrieveMessages()
 {
 	std::thread([&]() {
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		std::this_thread::sleep_for(std::chrono::milliseconds(500));
 		m_Networking->CheckIncomingMessages([&](std::vector<std::string> messages)
 			{
 				if (messages.size() >= m_AmountOfMessages) {
