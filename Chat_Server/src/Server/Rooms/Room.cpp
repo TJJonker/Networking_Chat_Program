@@ -13,12 +13,9 @@ bool Room::AddClient(std::shared_ptr<Client> client)
 
 	m_ConnectedClients.insert({client->Socket, client});
 
-	if (m_onClientJoined) {
-		std::map<SOCKET, std::shared_ptr<Client>>::iterator it;
-		for (it = m_ConnectedClients.begin(); it != m_ConnectedClients.end(); it++) {
-			m_onClientJoined(it->second);
-		}
-	}
+	// Hardcoded welcome message
+	std::string message = client->ClientID + " joined the room!";
+	m_Messages.push_back(message);
 
 	return true;
 }
@@ -30,24 +27,24 @@ bool Room::RemoveClient(std::shared_ptr<Client> client)
 			return false;
 	}
 
+	// Hardcoded leave message
+	std::string message = client->ClientID + " left the room.";
+	m_Messages.push_back(message);
+
 	m_ConnectedClients.erase(client->Socket);
 	return true;
 }
 
+std::vector<std::string> Room::GetMessages()
+{
+	std::vector<std::string> messages;
+	for (std::string message : m_Messages)
+		messages.push_back(message);
+	return messages;
+}
+
 void Room::SendChatMessage(const std::shared_ptr<Client> client, std::string& text)
 {
-	Message* message = new Message(client->ClientID, text);
-
-	if(m_OnMessageSent)
-		m_OnMessageSent(client, message);
+	m_Messages.push_back(text);
 }
 
-void Room::SetCallback_OnMessageSent(std::function<void(const std::shared_ptr<Client>, const Message* message)> onMessageSent)
-{
-	m_OnMessageSent = onMessageSent;
-}
-
-void Room::SetCallback_OnClientJoined(std::function<void(const std::shared_ptr<Client>)> onClientJoined)
-{
-	m_onClientJoined = onClientJoined;
-}

@@ -11,33 +11,28 @@ void LobbyState::OnEnter()
 {
 	m_Networking->RequestRooms([&](std::vector<std::string> roomNames) {
 			m_RoomNames = roomNames;
-		}
-	);
-
-	LOG_WARNING("Which room do you want to join? (Repeat the room name)"); 
+			LOG_WARNING("Which room do you want to join? (Repeat the room name)"); 
 	
-	for (std::string& name : m_RoomNames) 
-		LOG_WARNING(name); 
+			for (std::string& name : m_RoomNames) 
+				LOG_WARNING(name); 
 	
-	std::string roomChoice = ChooseRoom();
-	m_Networking->RequestJoinRoom(roomChoice, [&](std::string response) 
-		{ 
-			if (response == TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::FAILED)) {
-				TWONET_LOG_ERROR("Failed to join the room. Please restart the application.");
-				return;
-			}
+			std::string roomChoice = ChooseRoom();
+			m_Networking->RequestJoinRoom(roomChoice, [&](std::string response) 
+				{ 
+					if (response == TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::FAILED)) {
+						TWONET_LOG_ERROR("Failed to join the room. Please restart the application.");
+						return;
+					}
 
-			LOG_WARNING("Joined the room!");
-			m_StateManager->ChangeState(StateManager::AppState::ROOM);
+					LOG_WARNING("Joined the room!");
+					m_StateManager->ChangeState(StateManager::AppState::ROOM);
+				}
+			);
 		}
 	);
 }
 
 void LobbyState::OnExit()
-{
-}
-
-void LobbyState::OnUpdate()
 {
 }
 

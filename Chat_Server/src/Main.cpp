@@ -26,23 +26,17 @@ bool AddClientToRoom(std::shared_ptr<Client> client, TwoNet::Buffer& buffer) {
 	return Commands::AddClientToRooms(client, roomName, server, roomManager);
 }
 
-//bool SendMessage(SOCKET socket, TwoNet::Buffer&) {
-//
-//}
-
-
-void OnMessageSentCallback(const std::shared_ptr<Client> client, const Message* message) {
-	TwoNet::Buffer buffer;
-	TwoNet::TwoProt::SerializeData(buffer, message->Text.c_str(), message->Text.length());
-	server.SendData(client->Socket, buffer);
+bool SendNewMessage(std::shared_ptr<Client> client, TwoNet::Buffer& buffer) {
+	const char* message = TwoNet::TwoProt::DeserializeData(buffer);
+	return Commands::SendNewMessage(client, message, server, roomManager);
 }
 
-void OnClientJoined(const std::shared_ptr<Client> client) {
-	std::string welcomeMessage(client->ClientID + " Joined the room! Welcome!");
-	TWONET_LOG_ERROR("Did it work?");
-	TwoNet::Buffer buffer;
-	TwoNet::TwoProt::SerializeData(buffer, welcomeMessage.c_str(), welcomeMessage.length());
-	server.SendData(client->Socket, buffer);
+bool LeaveRoom(std::shared_ptr<Client> client, TwoNet::Buffer& buffer) {
+	return Commands::LeaveRoom(client, server, roomManager);
+}
+
+bool GetMessages(std::shared_ptr<Client> client, TwoNet::Buffer& buffer) {
+	return Commands::GetMessages(client, server, roomManager);
 }
 
 
@@ -52,25 +46,13 @@ int main() {
 
 	commands.insert({ "LIST_ROOMS", SendListOfRooms });
 	commands.insert({ "JOIN_ROOM", AddClientToRoom }); 
+	commands.insert({ "LEAVE_ROOM", LeaveRoom }); 
+	commands.insert({ "SEND_MESSAGE", SendNewMessage }); 
+	commands.insert({ "GET_MESSAGES", GetMessages }); 
 
-	std::string roomName1 = "R1";
-	std::string roomName2 = "R2";
-	std::string roomName3 = "R3";
-
-	roomManager.AddRoom(roomName1);
-	roomManager.AddRoom(roomName2);
-	roomManager.AddRoom(roomName3);
-
-	Room* room1 = roomManager.GetRoom(roomName1);
-	Room* room2 = roomManager.GetRoom(roomName2);
-	Room* room3 = roomManager.GetRoom(roomName3);
-
-	room1->SetCallback_OnMessageSent(OnMessageSentCallback);
-	room1->SetCallback_OnClientJoined(OnClientJoined);
-	room2->SetCallback_OnMessageSent(OnMessageSentCallback);
-	room2->SetCallback_OnClientJoined(OnClientJoined);
-	room3->SetCallback_OnMessageSent(OnMessageSentCallback);
-	room3->SetCallback_OnClientJoined(OnClientJoined);
+	roomManager.AddRoom("R1");
+	roomManager.AddRoom("R2");
+	roomManager.AddRoom("R3");
 
 	int result;
 	result = server.Initialize();

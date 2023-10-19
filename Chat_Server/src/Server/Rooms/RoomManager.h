@@ -15,5 +15,6 @@ public:
 
 	std::vector<std::string> GetRoomNames();
 	Room* GetRoom(std::string& name);
+	Room* GetRoom(SOCKET socket);	
 };
 

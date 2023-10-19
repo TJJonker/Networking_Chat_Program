@@ -31,4 +31,3 @@ void ConnectingState::OnEnter()
 
 void ConnectingState::OnExit() { }
 
-void ConnectingState::OnUpdate() { }

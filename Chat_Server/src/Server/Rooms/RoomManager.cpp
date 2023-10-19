@@ -56,3 +56,13 @@ Room* RoomManager::GetRoom(std::string& name)
 
 	return m_Rooms[name];
 }
+
+Room* RoomManager::GetRoom(SOCKET socket)
+{
+	std::map<std::string, Room*>::iterator it;
+	for (it = m_Rooms.begin(); it != m_Rooms.end(); it++) {
+		if (it->second->IsSocketConnected(socket))
+			return it->second;
+	}
+	return nullptr;
+}

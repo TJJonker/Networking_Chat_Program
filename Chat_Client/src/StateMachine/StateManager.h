@@ -22,6 +22,5 @@ public:
 	void Initialize(std::map<AppState, State*>& states, AppState startState = AppState::CONNECTING);
 
 	void ChangeState(AppState newState);
-	void Update();
 };
 

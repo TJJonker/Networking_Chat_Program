@@ -58,6 +58,7 @@
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Networking\Client.h" />
     <ClInclude Include="src\Networking\Networking.h" />
+    <ClInclude Include="src\Networking\Request.h" />
     <ClInclude Include="src\StateMachine\State.h" />
     <ClInclude Include="src\StateMachine\StateManager.h" />
     <ClInclude Include="src\StateMachine\States\ConnectingState.h" />

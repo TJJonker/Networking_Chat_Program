@@ -18,8 +18,3 @@ void StateManager::ChangeState(AppState newState)
 	m_CurrentState = newState;
 	m_States[m_CurrentState]->OnEnter();
 }
-
-void StateManager::Update()
-{
-	m_States[m_CurrentState]->OnUpdate();
-}

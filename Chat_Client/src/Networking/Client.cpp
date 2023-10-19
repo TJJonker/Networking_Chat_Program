@@ -56,11 +56,7 @@ bool Client::Connect(std::string clientID, std::string* connectionMessage)
 	TwoNet::Buffer buffer;
 	TwoNet::TwoProt::SerializeData(buffer, clientID.c_str(), clientID.length());
 
-	result = SendData(buffer);
-	if (result == 0) {
-		TWONET_LOG_WARNING("Failed to send initial data.");
-		return false;
-	}
+	send(m_ClientSocket, buffer.GetBufferData(), buffer.GetSize(), 0);
 
 	buffer.Clear();
 	result = ReceiveData(buffer);
@@ -73,15 +69,14 @@ bool Client::Connect(std::string clientID, std::string* connectionMessage)
 	return true;
 }
 
-bool Client::SendData(TwoNet::Buffer& buffer)
+void Client::SendData(TwoNet::Buffer& buffer, std::function<void(TwoNet::Buffer)> callback)
 {
-	int result = send(m_ClientSocket, buffer.GetBufferData(), buffer.GetSize(), 0);
-	if (result == SOCKET_ERROR) {
-		TWONET_LOG_WARNING("Error while sending data.");
-		return false;
-	}
+	Request* request = new Request();
+	request->buffer = std::make_shared<TwoNet::Buffer>(buffer);
+	request->callback = callback;
 
-	return true;
+	m_Requests.push(request);
+	HandleData();
 }
 
 bool Client::ReceiveData(TwoNet::Buffer& receivedDataBuffer)
@@ -124,4 +119,37 @@ bool Client::CloseConnection()
 	}
 
 	return false;
+}
+
+void Client::HandleData()
+{
+	if (m_IsHandlingRequest)
+		return;
+
+	if (m_Requests.size() <= 0)
+		return;
+
+	Request* newRequest = m_Requests.front();
+	m_Requests.pop();
+
+	int result = send(m_ClientSocket, newRequest->buffer->GetBufferData(), newRequest->buffer->GetSize(), 0);
+	if (result == SOCKET_ERROR) {
+		TWONET_LOG_WARNING("Error while sending data.");
+		m_IsHandlingRequest = false;
+	}
+	
+	std::function<void(TwoNet::Buffer)> callback = newRequest->callback;
+
+	std::thread([&, callback]()
+		{
+			int result;
+			TwoNet::Buffer buffer;
+
+			result = ReceiveData(buffer);
+			if (result) 
+				callback(buffer);
+
+			m_IsHandlingRequest = false;
+		}
+	).detach();
 }

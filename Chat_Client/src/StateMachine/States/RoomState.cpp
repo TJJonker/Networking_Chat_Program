@@ -1,34 +1,87 @@
 #include "pch.h"
 #include "RoomState.h"
+#include <conio.h>
+#include <iostream>
+#include <TwoNet/Utils/Utils.h>
 
 RoomState::RoomState(StateManager* stateManager, Networking* networking)
 	: m_StateManager(stateManager), m_Networking(networking) { }
 
 RoomState::~RoomState() { }
 
-void RoomState::OnEnter()
+void RoomState::OnEnter() 
 {
+	GetUserInput();
+	RetrieveMessages();
 }
 
 void RoomState::OnExit()
 {
-	system("cls");
+	m_AmountOfMessages = 0;
 }
 
-void RoomState::OnUpdate()
+
+void RoomState::GetUserInput()
 {
-	static auto start = std::chrono::high_resolution_clock::now();
+	TWONET_LOG_INFO("check");
+	std::thread([&]()
+		{
+			std::string input;
+			while (true) {
+				std::getline(std::cin, input);
+				if (input.empty())
+					continue;
 
-	auto end = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - start);
+				if (input == "E") {
+					m_Networking->RequestLeaveRoom([&](std::string response)
+						{
+							if (response == TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::SUCCESS)) { 
+								m_ChangeState = true;
+							}
+							else {
+								TWONET_LOG_ERROR("Error while leaving the room. Please restart the application.");
+							}
+						}
+					);
+				} 
+				else {
+					m_Networking->RequestSendMessage(input, [&](std::string response) {
+							if (response == TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::SUCCESS)) {
+								GetUserInput();
+							}
+							else {
+								TWONET_LOG_ERROR("Error while sending the message. Please restart the application.");
+							}
+						}
+					);					
+				}
+				break;
+				
+			}
+		}
+	).detach();
+}
 
-	if (duration.count() >= 2) {
-		start = std::chrono::high_resolution_clock::now();
-		TWONET_LOG_ERROR("Working on it!");
-		m_Networking->CheckIncomingMessages([](std::string message)
+void RoomState::RetrieveMessages()
+{
+	std::thread([&]() {
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		m_Networking->CheckIncomingMessages([&](std::vector<std::string> messages)
 			{
-				LOG_INFO(message);
+				if (messages.size() >= m_AmountOfMessages) {
+					for (int i = m_AmountOfMessages; i < messages.size(); i++) {
+						m_AmountOfMessages++;
+						LOG_WARNING(messages[i]);
+					}
+				}
+
+				if(m_ChangeState)
+					m_StateManager->ChangeState(StateManager::AppState::LOBBY);
+				else 
+					RetrieveMessages();
 			}
 		);
-	}
+		}
+	).detach();
 }
+

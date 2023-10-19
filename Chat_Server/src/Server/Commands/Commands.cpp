@@ -42,3 +42,60 @@ bool Commands::AddClientToRooms(std::shared_ptr<Client> client, std::string room
 	server.SendData(client->Socket, buffer);
 	return true;
 }
+
+bool Commands::SendNewMessage(std::shared_ptr<Client> client, std::string message, NetworkServer& server, RoomManager& roomManager)
+{
+	TwoNet::Buffer buffer; 
+	std::string response; 
+	TWONET_LOG_TRACE("Check1");
+	Room* room = roomManager.GetRoom(client->Socket);
+	TWONET_LOG_TRACE(room->GetName());
+	room->SendChatMessage(client, message);
+	TWONET_LOG_TRACE("Check3");
+
+	response = TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::SUCCESS); 
+	TwoNet::TwoProt::SerializeData(buffer, response.c_str(), response.length()); 
+	server.SendData(client->Socket, buffer); 
+	const char* res = TwoNet::TwoProt::DeserializeData(buffer);
+	TWONET_LOG_TRACE(res);
+
+	return true;
+}
+
+bool Commands::LeaveRoom(std::shared_ptr<Client> client, NetworkServer& server, RoomManager& roomManager)
+{
+	int result;
+	TwoNet::Buffer buffer; 
+	std::string response; 
+
+	Room* room = roomManager.GetRoom(client->Socket);
+	result = room->RemoveClient(client);
+	if (!result) {
+		response = TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::FAILED);
+		TwoNet::TwoProt::SerializeData(buffer, response.c_str(), response.length()); 
+		server.SendData(client->Socket, buffer); 
+	}
+
+	response = TwoNet::Utils::ResponseToString(TwoNet::Utils::Response::SUCCESS); 
+	TwoNet::TwoProt::SerializeData(buffer, response.c_str(), response.length()); 
+	server.SendData(client->Socket, buffer); 
+
+	return true;
+}
+
+bool Commands::GetMessages(std::shared_ptr<Client> client, NetworkServer& server, RoomManager& roomManager)
+{
+	int result;
+	TwoNet::Buffer buffer;
+	std::string response;
+
+	Room* room = roomManager.GetRoom(client->Socket);
+	std::vector<std::string> messages = room->GetMessages();
+
+	for (std::string message : messages) 
+		TwoNet::TwoProt::SerializeData(buffer, message.c_str(), message.length());
+
+	server.SendData(client->Socket, buffer);
+
+	return true;
+}

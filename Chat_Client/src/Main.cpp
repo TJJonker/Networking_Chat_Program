@@ -21,7 +21,5 @@ int main() {
 	states.insert({ StateManager::AppState::ROOM, new RoomState(stateManager, networking)});
 	stateManager->Initialize(states);
 
-	while (true) {
-		stateManager->Update();
-	}
+	while (true);
 }
