@@ -27,6 +27,9 @@
     <ClInclude Include="src\Networking\Networking.h">
       <Filter>Networking</Filter>
     </ClInclude>
+    <ClInclude Include="src\Networking\Request.h">
+      <Filter>Networking</Filter>
+    </ClInclude>
     <ClInclude Include="src\StateMachine\State.h">
       <Filter>StateMachine</Filter>
     </ClInclude>
@@ -43,7 +46,6 @@
       <Filter>StateMachine\States</Filter>
     </ClInclude>
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\Networking\Request.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
